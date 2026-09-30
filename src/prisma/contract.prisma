@@ -1,21 +1,97 @@
 // use prisma-8
 
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  username  String?
-  name      String?
-  posts     Post[]
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+  password  String   // Password ter-hash (bcrypt/argon2)
+  name      String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt temporal.updatedAt()
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+model IucnStatus {
+  id      Int       @id @default(autoincrement())
+  code    String    @unique
+  name    String
+  species Species[]
+}
+
+model Species {
+  id             BigInt           @id @default(autoincrement())
+  scientificName String           @unique
+  commonName     String
+  iucnStatusId   Int?
+  iucnStatus     IucnStatus?      @relation(fields: [iucnStatusId], references: [id])
+  localNames     LocalName[]
+  photos         SpeciesPhoto[]
+  regencies      SpeciesRegency[]
+  wppZones       SpeciesWppZone[]
+  createdAt      DateTime         @default(now())
+  updatedAt      temporal.updatedAt()
+}
+
+model LocalName {
+  id         BigInt  @id @default(autoincrement())
+  speciesId  BigInt
+  species    Species @relation(fields: [speciesId], references: [id])
+  name       String
+  regionNote String?
+}
+
+model Regency {
+  id       Int              @id @default(autoincrement())
+  name     String
+  province String
+  species  SpeciesRegency[]
+}
+
+model SpeciesRegency {
+  speciesId BigInt
+  species   Species @relation(fields: [speciesId], references: [id])
+  regencyId Int
+  regency   Regency @relation(fields: [regencyId], references: [id])
+
+  @@id([speciesId, regencyId])
+}
+
+model WppZone {
+  id          Int              @id @default(autoincrement())
+  code        String           @unique
+  description String?
+  species     SpeciesWppZone[]
+}
+
+model SpeciesWppZone {
+  speciesId BigInt
+  species   Species @relation(fields: [speciesId], references: [id])
+  wppZoneId Int
+  wppZone   WppZone @relation(fields: [wppZoneId], references: [id])
+
+  @@id([speciesId, wppZoneId])
+}
+
+model SpeciesPhoto {
+  id        BigInt  @id @default(autoincrement())
+  speciesId BigInt
+  species   Species @relation(fields: [speciesId], references: [id])
+  filePath  String
+  caption   String?
+  isPrimary Boolean @default(false)
+}
+
+// Tabel Antrean Usulan dari Publik
+model UserSubmission {
+  id            BigInt   @id @default(autoincrement())
+  submittedName String   // Nama lokal yang diusulkan
+  photoFilePath String   // Path/URL foto yang diunggah
+  locationNote  String?  // Catatan lokasi dari pengusul
+  submitterName String?  // Nama pengusul (opsional)
+  createdAt     DateTime @default(now())
+  updatedAt     temporal.updatedAt()
 }

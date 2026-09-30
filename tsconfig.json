@@ -12,7 +12,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "types": [
-      "node"
+      "node",
+      "express",
+      "multer"
     ]
   },
   "include": ["src/**/*.ts"]

@@ -1,19 +1,28 @@
-import { createServer } from "node:http";
+import express , { type Request, type Response } from "express";
+import fishRoutes from "./routes/fishRoutes.ts";
+import authRoutes from "./routes/authRoutes.ts";
+import iucnRoutes from "./routes/iucnRoutes.ts";
+import regencyRoutes from "./routes/regencyRoutes.ts";
+import wppRoutes from "./routes/wppRoutes.ts";
+import speciesRoutes from "./routes/speciesRoutes.ts";
+import path from 'path';
 
-import { listUsers } from "./prisma/users";
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const port = Number(process.env.PORT ?? 3000);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-createServer(async (_request, response) => {
-  try {
-    const users = await listUsers();
-    response.writeHead(200, { "content-type": "application/json" });
-    response.end(JSON.stringify({ users }));
-  } catch (error) {
-    console.error("Failed to query users:", error);
-    response.writeHead(500, { "content-type": "application/json" });
-    response.end(JSON.stringify({ error: "Could not query users yet." }));
-  }
-}).listen(port, "0.0.0.0", () => {
-  console.log(`Server running at http://localhost:${port}`);
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+app.use("/api/fish", fishRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/iucn", iucnRoutes);
+app.use("/api/regency", regencyRoutes);
+app.use("/api/wpp", wppRoutes);
+app.use("/api/species", speciesRoutes)
+
+
+app.listen(PORT, () => {
+  console.log(`Server berjalan di http://localhost:${PORT}`);
 });

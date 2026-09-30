@@ -34,9 +34,8 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'f9c0cce472725c679237d4babccc023e7e30dda525835a41d756b27f84f548f2'>;
-export type ExecutionHash =
-  ExecutionHashBase<'4a722e3d9562eecdf276bfb337d79c3bc426a2ea792fb8f0767017bd19149235'>;
+  StorageHashBase<'0ac3164157f8f94341591c0fcbbed4954312d241de61639fa0fa2f55b3e151e1'>;
+export type ExecutionHash = ExecutionHashBase<string>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -289,24 +288,6 @@ export type FieldOutputTypes = {
       readonly speciesId: CodecTypes['pg/int8@1']['output'];
       readonly wppZoneId: CodecTypes['pg/int4@1']['output'];
     };
-    readonly User: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-      readonly email: CodecTypes['pg/text@1']['output'];
-      readonly id: CodecTypes['pg/int4@1']['output'];
-      readonly name: CodecTypes['pg/text@1']['output'];
-      readonly password: CodecTypes['pg/text@1']['output'];
-      readonly role: 'ADMIN' | 'SUPER_ADMIN';
-      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    };
-    readonly UserSubmission: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-      readonly id: CodecTypes['pg/int8@1']['output'];
-      readonly locationNote: CodecTypes['pg/text@1']['output'] | null;
-      readonly photoFilePath: CodecTypes['pg/text@1']['output'];
-      readonly submittedName: CodecTypes['pg/text@1']['output'];
-      readonly submitterName: CodecTypes['pg/text@1']['output'] | null;
-      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    };
     readonly WppZone: {
       readonly code: CodecTypes['pg/text@1']['output'];
       readonly description: CodecTypes['pg/text@1']['output'] | null;
@@ -354,24 +335,6 @@ export type FieldInputTypes = {
     readonly SpeciesWppZone: {
       readonly speciesId: CodecTypes['pg/int8@1']['input'];
       readonly wppZoneId: CodecTypes['pg/int4@1']['input'];
-    };
-    readonly User: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-      readonly email: CodecTypes['pg/text@1']['input'];
-      readonly id: CodecTypes['pg/int4@1']['input'];
-      readonly name: CodecTypes['pg/text@1']['input'];
-      readonly password: CodecTypes['pg/text@1']['input'];
-      readonly role: 'ADMIN' | 'SUPER_ADMIN';
-      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-    };
-    readonly UserSubmission: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-      readonly id: CodecTypes['pg/int8@1']['input'];
-      readonly locationNote: CodecTypes['pg/text@1']['input'] | null;
-      readonly photoFilePath: CodecTypes['pg/text@1']['input'];
-      readonly submittedName: CodecTypes['pg/text@1']['input'];
-      readonly submitterName: CodecTypes['pg/text@1']['input'] | null;
-      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly WppZone: {
       readonly code: CodecTypes['pg/text@1']['input'];
@@ -421,24 +384,6 @@ export type StorageColumnTypes = {
       readonly speciesId: CodecTypes['pg/int8@1']['output'];
       readonly wppZoneId: CodecTypes['pg/int4@1']['output'];
     };
-    readonly User: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-      readonly email: CodecTypes['pg/text@1']['output'];
-      readonly id: CodecTypes['pg/int4@1']['output'];
-      readonly name: CodecTypes['pg/text@1']['output'];
-      readonly password: CodecTypes['pg/text@1']['output'];
-      readonly role: 'ADMIN' | 'SUPER_ADMIN';
-      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    };
-    readonly UserSubmission: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-      readonly id: CodecTypes['pg/int8@1']['output'];
-      readonly locationNote: CodecTypes['pg/text@1']['output'] | null;
-      readonly photoFilePath: CodecTypes['pg/text@1']['output'];
-      readonly submittedName: CodecTypes['pg/text@1']['output'];
-      readonly submitterName: CodecTypes['pg/text@1']['output'] | null;
-      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    };
     readonly WppZone: {
       readonly code: CodecTypes['pg/text@1']['output'];
       readonly description: CodecTypes['pg/text@1']['output'] | null;
@@ -486,24 +431,6 @@ export type StorageColumnInputTypes = {
     readonly SpeciesWppZone: {
       readonly speciesId: CodecTypes['pg/int8@1']['input'];
       readonly wppZoneId: CodecTypes['pg/int4@1']['input'];
-    };
-    readonly User: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-      readonly email: CodecTypes['pg/text@1']['input'];
-      readonly id: CodecTypes['pg/int4@1']['input'];
-      readonly name: CodecTypes['pg/text@1']['input'];
-      readonly password: CodecTypes['pg/text@1']['input'];
-      readonly role: 'ADMIN' | 'SUPER_ADMIN';
-      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-    };
-    readonly UserSubmission: {
-      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
-      readonly id: CodecTypes['pg/int8@1']['input'];
-      readonly locationNote: CodecTypes['pg/text@1']['input'] | null;
-      readonly photoFilePath: CodecTypes['pg/text@1']['input'];
-      readonly submittedName: CodecTypes['pg/text@1']['input'];
-      readonly submitterName: CodecTypes['pg/text@1']['input'] | null;
-      readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly WppZone: {
       readonly code: CodecTypes['pg/text@1']['input'];
@@ -573,26 +500,6 @@ export namespace Models {
     wppZone: public_WppZone;
     readonly [RelationKeys]?: 'species' | 'wppZone';
   };
-  export type public_User = {
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    email: CodecTypes['pg/text@1']['output'];
-    id: CodecTypes['pg/int4@1']['output'];
-    name: CodecTypes['pg/text@1']['output'];
-    password: CodecTypes['pg/text@1']['output'];
-    role: 'ADMIN' | 'SUPER_ADMIN';
-    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    readonly [RelationKeys]?: never;
-  };
-  export type public_UserSubmission = {
-    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    id: CodecTypes['pg/int8@1']['output'];
-    locationNote: CodecTypes['pg/text@1']['output'] | null;
-    photoFilePath: CodecTypes['pg/text@1']['output'];
-    submittedName: CodecTypes['pg/text@1']['output'];
-    submitterName: CodecTypes['pg/text@1']['output'] | null;
-    updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
-    readonly [RelationKeys]?: never;
-  };
   export type public_WppZone = {
     code: CodecTypes['pg/text@1']['output'];
     description: CodecTypes['pg/text@1']['output'] | null;
@@ -611,8 +518,6 @@ export declare const models: {
     SpeciesPhoto: Models.public_SpeciesPhoto;
     SpeciesRegency: Models.public_SpeciesRegency;
     SpeciesWppZone: Models.public_SpeciesWppZone;
-    User: Models.public_User;
-    UserSubmission: Models.public_UserSubmission;
     WppZone: Models.public_WppZone;
   };
 };
@@ -777,10 +682,11 @@ type ContractBase = Omit<
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-temporal@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
                 };
               };
               primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [{ readonly columns: readonly ['scientificName'] }];
+              uniques: readonly [];
               indexes: readonly [
                 {
                   readonly name: 'Species_iucnStatusId_idx_da225e60';
@@ -977,106 +883,6 @@ type ContractBase = Omit<
                 },
               ];
             };
-            readonly User: {
-              columns: {
-                readonly createdAt: {
-                  readonly nativeType: 'timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                  readonly nullable: false;
-                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
-                };
-                readonly email: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly id: {
-                  readonly nativeType: 'int4';
-                  readonly codecId: 'pg/int4@1';
-                  readonly nullable: false;
-                  readonly default: {
-                    readonly kind: 'function';
-                    readonly expression: 'autoincrement()';
-                  };
-                };
-                readonly name: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly password: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly role: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                  readonly default: {
-                    readonly kind: 'literal';
-                    readonly value: DefaultLiteralValue<'pg/text@1', 'ADMIN'>;
-                  };
-                };
-                readonly updatedAt: {
-                  readonly nativeType: 'timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                  readonly nullable: false;
-                };
-              };
-              primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [{ readonly columns: readonly ['email'] }];
-              indexes: readonly [];
-              foreignKeys: readonly [];
-            };
-            readonly UserSubmission: {
-              columns: {
-                readonly createdAt: {
-                  readonly nativeType: 'timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                  readonly nullable: false;
-                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
-                };
-                readonly id: {
-                  readonly nativeType: 'int8';
-                  readonly codecId: 'pg/int8@1';
-                  readonly nullable: false;
-                  readonly default: {
-                    readonly kind: 'function';
-                    readonly expression: 'autoincrement()';
-                  };
-                };
-                readonly locationNote: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
-                readonly photoFilePath: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly submittedName: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
-                };
-                readonly submitterName: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
-                readonly updatedAt: {
-                  readonly nativeType: 'timestamptz';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                  readonly nullable: false;
-                };
-              };
-              primaryKey: { readonly columns: readonly ['id'] };
-              uniques: readonly [];
-              indexes: readonly [];
-              foreignKeys: readonly [];
-            };
             readonly WppZone: {
               columns: {
                 readonly code: {
@@ -1103,12 +909,6 @@ type ContractBase = Omit<
               uniques: readonly [{ readonly columns: readonly ['code'] }];
               indexes: readonly [];
               foreignKeys: readonly [];
-            };
-          };
-          readonly valueSet: {
-            readonly Role: {
-              readonly kind: 'valueSet';
-              readonly values: readonly ['ADMIN', 'SUPER_ADMIN'];
             };
           };
         };
@@ -1139,11 +939,6 @@ type ContractBase = Omit<
     readonly SpeciesWppZone: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'SpeciesWppZone';
-    };
-    readonly User: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
-    readonly UserSubmission: {
-      readonly namespace: 'public' & NamespaceId;
-      readonly model: 'UserSubmission';
     };
     readonly WppZone: { readonly namespace: 'public' & NamespaceId; readonly model: 'WppZone' };
   };
@@ -1516,110 +1311,6 @@ type ContractBase = Omit<
               };
             };
           };
-          readonly User: {
-            readonly fields: {
-              readonly createdAt: {
-                readonly nullable: false;
-                readonly type: {
-                  readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                };
-              };
-              readonly email: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly id: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
-              };
-              readonly name: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly password: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly role: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly updatedAt: {
-                readonly nullable: false;
-                readonly type: {
-                  readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                };
-              };
-            };
-            readonly relations: Record<string, never>;
-            readonly storage: {
-              readonly table: 'User';
-              readonly namespaceId: 'public';
-              readonly fields: {
-                readonly createdAt: { readonly column: 'createdAt' };
-                readonly email: { readonly column: 'email' };
-                readonly id: { readonly column: 'id' };
-                readonly name: { readonly column: 'name' };
-                readonly password: { readonly column: 'password' };
-                readonly role: { readonly column: 'role' };
-                readonly updatedAt: { readonly column: 'updatedAt' };
-              };
-            };
-          };
-          readonly UserSubmission: {
-            readonly fields: {
-              readonly createdAt: {
-                readonly nullable: false;
-                readonly type: {
-                  readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                };
-              };
-              readonly id: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int8@1' };
-              };
-              readonly locationNote: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly photoFilePath: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly submittedName: {
-                readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly submitterName: {
-                readonly nullable: true;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
-              };
-              readonly updatedAt: {
-                readonly nullable: false;
-                readonly type: {
-                  readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamptz-temporal@1';
-                };
-              };
-            };
-            readonly relations: Record<string, never>;
-            readonly storage: {
-              readonly table: 'UserSubmission';
-              readonly namespaceId: 'public';
-              readonly fields: {
-                readonly createdAt: { readonly column: 'createdAt' };
-                readonly id: { readonly column: 'id' };
-                readonly locationNote: { readonly column: 'locationNote' };
-                readonly photoFilePath: { readonly column: 'photoFilePath' };
-                readonly submittedName: { readonly column: 'submittedName' };
-                readonly submitterName: { readonly column: 'submitterName' };
-                readonly updatedAt: { readonly column: 'updatedAt' };
-              };
-            };
-          };
           readonly WppZone: {
             readonly fields: {
               readonly code: {
@@ -1659,15 +1350,6 @@ type ContractBase = Omit<
             };
           };
         };
-        readonly enum: {
-          readonly Role: {
-            readonly codecId: 'pg/text@1';
-            readonly members: readonly [
-              { readonly name: 'ADMIN'; readonly value: 'ADMIN' },
-              { readonly name: 'SUPER_ADMIN'; readonly value: 'SUPER_ADMIN' },
-            ];
-          };
-        };
       };
     };
   };
@@ -1692,40 +1374,6 @@ type ContractBase = Omit<
     };
   };
   readonly extensions: {};
-  readonly execution: {
-    readonly executionHash: ExecutionHash;
-    readonly mutations: {
-      readonly defaults: readonly [
-        {
-          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly onUpdate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly column: 'updatedAt';
-            readonly namespace: 'public';
-            readonly table: 'Species';
-          };
-        },
-        {
-          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly onUpdate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly column: 'updatedAt';
-            readonly namespace: 'public';
-            readonly table: 'User';
-          };
-        },
-        {
-          readonly onCreate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly onUpdate: { readonly id: 'instantNow'; readonly kind: 'generator' };
-          readonly ref: {
-            readonly column: 'updatedAt';
-            readonly namespace: 'public';
-            readonly table: 'UserSubmission';
-          };
-        },
-      ];
-    };
-  };
   readonly meta: {};
 
   readonly profileHash: ProfileHash;
