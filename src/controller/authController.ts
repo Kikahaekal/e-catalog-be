@@ -44,3 +44,9 @@ export const login = async (req: Request, res: Response): Promise<any> => {
         return res.status(500).json({ error: "Terjadi kesalahan saat login" });
     }
 }
+
+export const logout = async (req: Request, res: Response): Promise<any> => {
+    return res.status(200).json({
+        message: "Logout berhasil. Hapus token autentikasi dari sisi klien.",
+    });
+}
