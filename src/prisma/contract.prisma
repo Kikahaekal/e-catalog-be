@@ -39,7 +39,7 @@ model Species {
 model LocalName {
   id         BigInt  @id @default(autoincrement())
   speciesId  BigInt
-  species    Species @relation(fields: [speciesId], references: [id])
+  species    Species @relation(fields: [speciesId], references: [id], onDelete: Cascade)
   name       String
   regionNote String?
 }
@@ -53,9 +53,9 @@ model Regency {
 
 model SpeciesRegency {
   speciesId BigInt
-  species   Species @relation(fields: [speciesId], references: [id])
+  species   Species @relation(fields: [speciesId], references: [id], onDelete: Cascade)
   regencyId Int
-  regency   Regency @relation(fields: [regencyId], references: [id])
+  regency   Regency @relation(fields: [regencyId], references: [id], onDelete: Cascade)
 
   @@id([speciesId, regencyId])
 }
@@ -69,9 +69,9 @@ model WppZone {
 
 model SpeciesWppZone {
   speciesId BigInt
-  species   Species @relation(fields: [speciesId], references: [id])
+  species   Species @relation(fields: [speciesId], references: [id], onDelete: Cascade)
   wppZoneId Int
-  wppZone   WppZone @relation(fields: [wppZoneId], references: [id])
+  wppZone   WppZone @relation(fields: [wppZoneId], references: [id], onDelete: Cascade)
 
   @@id([speciesId, wppZoneId])
 }
@@ -79,7 +79,7 @@ model SpeciesWppZone {
 model SpeciesPhoto {
   id        BigInt  @id @default(autoincrement())
   speciesId BigInt
-  species   Species @relation(fields: [speciesId], references: [id])
+  species   Species @relation(fields: [speciesId], references: [id], onDelete: Cascade)
   filePath  String
   caption   String?
   isPrimary Boolean @default(false)

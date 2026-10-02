@@ -31,7 +31,7 @@ export const createWpp = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-export const editWpp = async (res: Response, req: Request): Promise<any> => {
+export const editWpp = async (req: Request, res: Response): Promise<any> => {
     try {
         const { wppId } = req.params;
         const { code, description } = req.body;
@@ -42,10 +42,10 @@ export const editWpp = async (res: Response, req: Request): Promise<any> => {
 
         const wpp = await db.orm.public.WppZone.where({
             id: Number(wppId)
-        }).update(
+        }).update({
             code,
             description
-        );
+        });
 
         return res.status(200).json({
             message: "Data berhasil diperbarui",
@@ -57,7 +57,7 @@ export const editWpp = async (res: Response, req: Request): Promise<any> => {
     }
 }
 
-export const deleteWpp = async (res: Response, req: Request): Promise<any> => {
+export const deleteWpp = async (req: Request, res: Response): Promise<any> => {
     try{
         const { wppId } = req.params;
 
@@ -69,7 +69,7 @@ export const deleteWpp = async (res: Response, req: Request): Promise<any> => {
             id: Number(wppId)
         }).delete();
 
-        return res.status(400).json({
+        return res.status(200).json({
             message: "Data berhasil dihapus"
         });
     } catch (error) {
@@ -78,7 +78,7 @@ export const deleteWpp = async (res: Response, req: Request): Promise<any> => {
     }
 }
 
-export const getWpp = async (res: Response, req: Request): Promise<any> => {
+export const getWpp = async (req: Request, res: Response): Promise<any> => {
     try{
         const { wppId } = req.params;
 
@@ -100,7 +100,7 @@ export const getWpp = async (res: Response, req: Request): Promise<any> => {
     }
 }
 
-export const getAllWpp = async (res: Response, req: Request): Promise<any> => {
+export const getAllWpp = async (req: Request, res: Response): Promise<any> => {
     try {
         const wpps = await db.orm.public.WppZone.all();
 

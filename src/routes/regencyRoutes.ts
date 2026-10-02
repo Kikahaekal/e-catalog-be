@@ -4,9 +4,9 @@ import { createRegency, deleteRegency, editRegency, getAllRegencies, getRegencie
 const router = Router();
 
 router.post('/', createRegency);
-router.put('/:iucnId', editRegency);
-router.delete('/:iucnId', deleteRegency);
-router.get('/:iucnId', getRegencies);
+router.put('/:regencyId', editRegency);
+router.delete('/:regencyId', deleteRegency);
+router.get('/:regencyId', getRegencies);
 router.get('/', getAllRegencies);
 
 export default router;

@@ -4,9 +4,9 @@ import { getSpecies, createSpecies, deletesSpecies, editSpecies, getAllSpecies }
 const router = Router();
 
 router.post('/', createSpecies);
-router.put('/:iucnId', editSpecies);
-router.delete('/:iucnId', deletesSpecies);
-router.get('/:iucnId', getSpecies);
+router.put('/:speciesId', editSpecies);
+router.delete('/:speciesId', deletesSpecies);
+router.get('/:speciesId', getSpecies);
 router.get('/', getAllSpecies);
 
 export default router;

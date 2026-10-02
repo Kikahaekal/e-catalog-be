@@ -1,6 +1,14 @@
 import { type Request, type Response } from "express";
 import { db } from "../prisma/db.ts";
 
+const serializeBigInt = (obj: any) => {
+    return JSON.parse(
+        JSON.stringify(obj, (_, value) =>
+            typeof value === "bigint" ? value.toString() : value
+        )
+    );
+};
+
 export const createSpecies = async (req: Request, res: Response): Promise<any> => {
     try {
         const { iucnStatusId, commonName, scientificName, wppIds, regencyIds } = req.body;
@@ -14,13 +22,13 @@ export const createSpecies = async (req: Request, res: Response): Promise<any> =
             commonName: commonName,
             scientificName: scientificName,
             ...(regencyIds && regencyIds.length > 0 && {
-                regencies: (r) => r.connect(
-                    regencyIds.map((id: number) => ({id}))
+                regencies: (r) => r.create(
+                    regencyIds.map((id: number) => ({regencyId: id}))
                 )
             }),
             ...(wppIds && wppIds.length > 0 && {
-                wppZones: (wpp) => wpp.connect(
-                    wppIds.map((id: number) => ({id}))
+                wppZones: (wpp) => wpp.create(
+                    wppIds.map((id: number) => ({wppZoneId: id}))
                 )
             })
         });
@@ -35,7 +43,7 @@ export const createSpecies = async (req: Request, res: Response): Promise<any> =
 
         return res.status(200).json({
             message: "Data spesies berhasil di input",
-            data: responseData
+            data: serializeBigInt(responseData)
         });
     } catch (error) {
         console.error("Error saat membuat data spesies:", error);
@@ -56,20 +64,35 @@ export const editSpecies = async (req: Request, res: Response): Promise <any> =>
             return res.status(400).json({error: "Data nama dan status iucn perlu diisi"})
         }
 
+        const parsedSpeciesId = BigInt(speciesId);
+        const existingSpecies = await db.orm.public.Species.where({ id: parsedSpeciesId }).first();
+        if (!existingSpecies) {
+            return res.status(404).json({ error: "Data spesies tidak ditemukan" });
+        }
+
+
+        if (regencyIds && Array.isArray(regencyIds)) {
+            await db.orm.public.SpeciesRegency.where({ speciesId: parsedSpeciesId }).delete();
+        }
+
+        if (wppIds && Array.isArray(wppIds)) {
+            await db.orm.public.SpeciesWppZone.where({ speciesId: parsedSpeciesId }).delete();
+        }
+
         const species = await db.orm.public.Species.where({
-            id: BigInt(speciesId)  
+            id: BigInt(parsedSpeciesId)  
         }).update({
             iucnStatusId: iucnStatusId,
             commonName: commonName,
             scientificName: scientificName,
             ...(regencyIds && regencyIds.length > 0 && {
-                regencies: (r) => r.connect(
-                    regencyIds.map((id: number) => ({id}))
+                regencies: (r) => r.create(
+                    regencyIds.map((id: number) => ({regencyId: id}))
                 )
             }),
             ...(wppIds && wppIds.length > 0 && {
-                wppZones: (wpp) => wpp.connect(
-                    wppIds.map((id: number) => ({id}))
+                wppZones: (wpp) => wpp.create(
+                    wppIds.map((id: number) => ({wppZoneId: id}))
                 )
             })
         });
@@ -82,7 +105,7 @@ export const editSpecies = async (req: Request, res: Response): Promise <any> =>
 
         return res.status(200).json({
             message: "Data berhasil diubah",
-            data: responseData
+            data: serializeBigInt(responseData)
         });
     } catch (error) {
         console.error("Error saat mengubah data spesies:", error);
@@ -98,8 +121,15 @@ export const deletesSpecies = async (req: Request, res: Response): Promise<any> 
             return res.status(400).json({error: "Id spesies wajib ada"})
         }
 
+        const parsedSpeciesId = BigInt(speciesId);
+
+        await db.orm.public.SpeciesRegency.where({ speciesId: parsedSpeciesId }).delete();
+        await db.orm.public.SpeciesWppZone.where({ speciesId: parsedSpeciesId }).delete();
+        await db.orm.public.LocalName.where({ speciesId: parsedSpeciesId }).delete();
+        await db.orm.public.SpeciesPhoto.where({ speciesId: parsedSpeciesId }).delete();
+
         const spesies = await db.orm.public.Species.where({
-            id: BigInt(speciesId)
+            id: parsedSpeciesId
         }).delete();
 
         if(!spesies) return res.status(400).json({error: "Data gagal dihapus"});
@@ -113,7 +143,7 @@ export const deletesSpecies = async (req: Request, res: Response): Promise<any> 
     }
 }
 
-export const getSpecies = async (res: Response, req: Request): Promise<any> => {
+export const getSpecies = async (req: Request, res: Response): Promise<any> => {
     try{
         const { speciesId } = req.params;
         
@@ -140,7 +170,7 @@ export const getSpecies = async (res: Response, req: Request): Promise<any> => {
 
         return res.status(200).json({
             message: "Data spesies berhasil diambil",
-            data: species
+            data: serializeBigInt(species)
         });
     } catch (error) {
         console.error("Error saat mengambil data spesies: ", error);
@@ -148,9 +178,12 @@ export const getSpecies = async (res: Response, req: Request): Promise<any> => {
     }
 }
 
-export const getAllSpecies = async (res: Response, req: Request): Promise<any> => {
+export const getAllSpecies = async (req: Request, res: Response): Promise<any> => {
     try{
-        const species = await db.orm.public.Species
+        const { name } = req.query;
+        const searchName = typeof name === "string" ? name.trim().toLocaleLowerCase() : "";
+
+        const allSpecies = await db.orm.public.Species
         .include("photos").include("localNames")
         .include(
             "regencies", (speciesRegency) => 
@@ -164,11 +197,18 @@ export const getAllSpecies = async (res: Response, req: Request): Promise<any> =
                 )
         ).all();
 
+        const species = searchName
+            ? allSpecies.filter((item) =>
+                [item.commonName, item.scientificName, ...item.localNames.map((localName) => localName.name)]
+                    .some((itemName) => itemName.toLocaleLowerCase().includes(searchName))
+            )
+            : allSpecies;
+
         if(!species) return res.status(404).json({error: "Data tidak ditemukan"});
 
         return res.status(200).json({
             message: "Data spesies berhasil diambil",
-            data: species
+            data: serializeBigInt(species)
         });
 
     } catch (error) {

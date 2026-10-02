@@ -39,6 +39,24 @@ export const submitFishName = async (req: Request, res: Response): Promise<any> 
     }
 }
 
+export const getAllFishSubmissions = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const submissions = await db.orm.public.UserSubmission.all();
+        const responseData = submissions.map((submission) => ({
+            ...submission,
+            id: submission.id.toString(),
+        }));
+
+        return res.status(200).json({
+            message: "Data permintaan berhasil diambil",
+            data: responseData,
+        });
+    } catch (error) {
+        console.error("Error saat mengambil data permintaan ikan:", error);
+        return res.status(500).json({ error: "Terjadi kesalahan saat mengambil data permintaan ikan" });
+    }
+}
+
 //fungsi buat acc permintaan input ikan
 export const approveSubmission = async (req: Request, res: Response): Promise<any> => {
     try {

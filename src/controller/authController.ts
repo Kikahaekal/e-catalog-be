@@ -15,19 +15,29 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
         const user = await db.orm.public.User.where({ email }).first();
         if (!user) {
+            console.log("GAGAL: Email tidak ditemukan di database.");
             return res.status(401).json({ error: "Email atau password salah" });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const plainPassword = String(password).trim();
+        const storedHash = user.password.trim();
+
+        const isPasswordValid = await bcrypt.compare(plainPassword, storedHash);
         if (!isPasswordValid) {
+            console.log("GAGAL: Password salah.");
             return res.status(401).json({ error: "Email atau password salah" });
         }
         
-        const token = jwt.sign({ userId: user.id.toString() }, JWT_SECRET!, { expiresIn: "1h" });
+        const token = jwt.sign(
+            { userId: user.id, role: user.role }, 
+            JWT_SECRET!, 
+            { expiresIn: "1h" }
+        );
 
         return res.status(200).json({
             message: "Login berhasil",
             token,
+            role: user.role
         });
     } catch (error) {
         console.error("Error saat login:", error);
