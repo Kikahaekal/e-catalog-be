@@ -11,16 +11,59 @@ const serializeBigInt = (obj: any) => {
 
 export const createSpecies = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { iucnStatusId, commonName, scientificName, wppIds, regencyIds } = req.body;
+        const {
+            iucnStatusId, commonName, scientificName, author, etymology, order, family, genus,
+            environment, climateZone, depthMinMeters, depthMaxMeters, tempMinC, tempMaxC,
+            distributionText, maxLengthCm, lengthType, maxWeightKg, maxAgeYears, dorsalSpines,
+            dorsalSoftRays, analSpines, analSoftRays, bodyShape, morphologyText, biologyText,
+            fecundityText, threatToHumans, fisheriesImportance, isGamefish, iucnAssessedAt,
+            citesStatus, cmsStatus, wppIds, regencyIds, synonyms, references
+        } = req.body;
 
-        if(!iucnStatusId || !commonName || !scientificName) {
-            return res.status(400).json({error: "Data nama dan status iucn perlu diisi"})
+        if(!commonName || !scientificName) {
+            return res.status(400).json({error: "Nama umum dan nama ilmiah wajib diisi"})
+        }
+        if (synonyms !== undefined && (!Array.isArray(synonyms) || synonyms.some((synonym) => !synonym.scientificName))) {
+            return res.status(400).json({ error: "Format sinonim tidak valid" });
+        }
+        if (references !== undefined && (!Array.isArray(references) || references.some((reference) => !Number.isInteger(Number(reference.referenceId)) || Number(reference.referenceId) <= 0))) {
+            return res.status(400).json({ error: "Format referensi spesies tidak valid" });
         }
 
         const species = await db.orm.public.Species.create({
-            iucnStatusId: iucnStatusId,
-            commonName: commonName,
-            scientificName: scientificName,
+            iucnStatusId: iucnStatusId ?? null,
+            commonName,
+            scientificName,
+            author,
+            etymology,
+            order,
+            family,
+            genus,
+            environment,
+            climateZone,
+            depthMinMeters,
+            depthMaxMeters,
+            tempMinC,
+            tempMaxC,
+            distributionText,
+            maxLengthCm,
+            lengthType,
+            maxWeightKg,
+            maxAgeYears,
+            dorsalSpines,
+            dorsalSoftRays,
+            analSpines,
+            analSoftRays,
+            bodyShape,
+            morphologyText,
+            biologyText,
+            fecundityText,
+            threatToHumans,
+            fisheriesImportance,
+            isGamefish: isGamefish ?? false,
+            iucnAssessedAt: iucnAssessedAt ? new Date(iucnAssessedAt) : null,
+            citesStatus,
+            cmsStatus,
             ...(regencyIds && regencyIds.length > 0 && {
                 regencies: (r) => r.create(
                     regencyIds.map((id: number) => ({regencyId: id}))
@@ -35,6 +78,22 @@ export const createSpecies = async (req: Request, res: Response): Promise<any> =
 
         if(!species) {
             return res.status(400).json({error: "Data spesies gagal ditambahkan"});
+        }
+
+        if (synonyms?.length) {
+            await Promise.all(synonyms.map((synonym: any) => db.orm.public.Synonym.create({
+                speciesId: species.id,
+                scientificName: synonym.scientificName,
+                author: synonym.author ?? null,
+                status: synonym.status ?? null,
+            })));
+        }
+        if (references?.length) {
+            await Promise.all(references.map((reference: any) => db.orm.public.SpeciesReference.create({
+                speciesId: species.id,
+                referenceId: BigInt(reference.referenceId),
+                isMainRef: reference.isMainRef ?? false,
+            })));
         }
 
         const responseData = {
@@ -54,14 +113,27 @@ export const createSpecies = async (req: Request, res: Response): Promise<any> =
 export const editSpecies = async (req: Request, res: Response): Promise <any> => {
     try {
         const { speciesId } = req.params;
-        const { iucnStatusId, commonName, scientificName, wppIds, regencyIds } = req.body;
+        const {
+            iucnStatusId, commonName, scientificName, author, etymology, order, family, genus,
+            environment, climateZone, depthMinMeters, depthMaxMeters, tempMinC, tempMaxC,
+            distributionText, maxLengthCm, lengthType, maxWeightKg, maxAgeYears, dorsalSpines,
+            dorsalSoftRays, analSpines, analSoftRays, bodyShape, morphologyText, biologyText,
+            fecundityText, threatToHumans, fisheriesImportance, isGamefish, iucnAssessedAt,
+            citesStatus, cmsStatus, wppIds, regencyIds, synonyms, references
+        } = req.body;
 
         if(!speciesId || typeof speciesId !== "string") {
             return res.status(400).json({error: "Id spesies wajib ada"});
         }
 
-        if(!iucnStatusId || !commonName || !scientificName) {
-            return res.status(400).json({error: "Data nama dan status iucn perlu diisi"})
+        if(!commonName || !scientificName) {
+            return res.status(400).json({error: "Nama umum dan nama ilmiah wajib diisi"})
+        }
+        if (synonyms !== undefined && (!Array.isArray(synonyms) || synonyms.some((synonym) => !synonym.scientificName))) {
+            return res.status(400).json({ error: "Format sinonim tidak valid" });
+        }
+        if (references !== undefined && (!Array.isArray(references) || references.some((reference) => !Number.isInteger(Number(reference.referenceId)) || Number(reference.referenceId) <= 0))) {
+            return res.status(400).json({ error: "Format referensi spesies tidak valid" });
         }
 
         const parsedSpeciesId = BigInt(speciesId);
@@ -78,13 +150,49 @@ export const editSpecies = async (req: Request, res: Response): Promise <any> =>
         if (wppIds && Array.isArray(wppIds)) {
             await db.orm.public.SpeciesWppZone.where({ speciesId: parsedSpeciesId }).delete();
         }
+        if (synonyms !== undefined) {
+            await db.orm.public.Synonym.where({ speciesId: parsedSpeciesId }).delete();
+        }
+        if (references !== undefined) {
+            await db.orm.public.SpeciesReference.where({ speciesId: parsedSpeciesId }).delete();
+        }
 
         const species = await db.orm.public.Species.where({
             id: BigInt(parsedSpeciesId)  
         }).update({
-            iucnStatusId: iucnStatusId,
-            commonName: commonName,
-            scientificName: scientificName,
+            iucnStatusId: iucnStatusId === undefined ? undefined : iucnStatusId,
+            commonName,
+            scientificName,
+            author,
+            etymology,
+            order,
+            family,
+            genus,
+            environment,
+            climateZone,
+            depthMinMeters,
+            depthMaxMeters,
+            tempMinC,
+            tempMaxC,
+            distributionText,
+            maxLengthCm,
+            lengthType,
+            maxWeightKg,
+            maxAgeYears,
+            dorsalSpines,
+            dorsalSoftRays,
+            analSpines,
+            analSoftRays,
+            bodyShape,
+            morphologyText,
+            biologyText,
+            fecundityText,
+            threatToHumans,
+            fisheriesImportance,
+            isGamefish,
+            iucnAssessedAt: iucnAssessedAt === undefined ? undefined : iucnAssessedAt ? new Date(iucnAssessedAt) : null,
+            citesStatus,
+            cmsStatus,
             ...(regencyIds && regencyIds.length > 0 && {
                 regencies: (r) => r.create(
                     regencyIds.map((id: number) => ({regencyId: id}))
@@ -96,6 +204,22 @@ export const editSpecies = async (req: Request, res: Response): Promise <any> =>
                 )
             })
         });
+
+        if (synonyms?.length) {
+            await Promise.all(synonyms.map((synonym: any) => db.orm.public.Synonym.create({
+                speciesId: parsedSpeciesId,
+                scientificName: synonym.scientificName,
+                author: synonym.author ?? null,
+                status: synonym.status ?? null,
+            })));
+        }
+        if (references?.length) {
+            await Promise.all(references.map((reference: any) => db.orm.public.SpeciesReference.create({
+                speciesId: parsedSpeciesId,
+                referenceId: BigInt(reference.referenceId),
+                isMainRef: reference.isMainRef ?? false,
+            })));
+        }
 
         if(!species) return res.status(400).json({error: "Data gagal diubah"});
 
@@ -153,7 +277,11 @@ export const getSpecies = async (req: Request, res: Response): Promise<any> => {
 
         const species = await db.orm.public.Species.where({
             id: BigInt(speciesId)
-        }).include("photos").include("localNames")
+        }).include("iucnStatus").include("synonyms").include("photos").include("localNames")
+        .include(
+            "references", (speciesReference) =>
+                speciesReference.include("reference")
+        )
         .include(
             "regencies", (speciesRegency) => 
                 speciesRegency.include("regency", (regency) => 
@@ -184,7 +312,11 @@ export const getAllSpecies = async (req: Request, res: Response): Promise<any> =
         const searchName = typeof name === "string" ? name.trim().toLocaleLowerCase() : "";
 
         const allSpecies = await db.orm.public.Species
-        .include("photos").include("localNames")
+        .include("iucnStatus").include("synonyms").include("photos").include("localNames")
+        .include(
+            "references", (speciesReference) =>
+                speciesReference.include("reference")
+        )
         .include(
             "regencies", (speciesRegency) => 
                 speciesRegency.include("regency", (regency) => 

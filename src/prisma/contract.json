@@ -12,6 +12,10 @@
       "model": "LocalName",
       "namespace": "public"
     },
+    "Reference": {
+      "model": "Reference",
+      "namespace": "public"
+    },
     "Regency": {
       "model": "Regency",
       "namespace": "public"
@@ -24,12 +28,20 @@
       "model": "SpeciesPhoto",
       "namespace": "public"
     },
+    "SpeciesReference": {
+      "model": "SpeciesReference",
+      "namespace": "public"
+    },
     "SpeciesRegency": {
       "model": "SpeciesRegency",
       "namespace": "public"
     },
     "SpeciesWppZone": {
       "model": "SpeciesWppZone",
+      "namespace": "public"
+    },
+    "Synonym": {
+      "model": "Synonym",
       "namespace": "public"
     },
     "User": {
@@ -189,6 +201,93 @@
               "table": "LocalName"
             }
           },
+          "Reference": {
+            "fields": {
+              "authors": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int8@1",
+                  "kind": "scalar"
+                }
+              },
+              "refCode": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "source": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "title": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "year": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "species": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "referenceId"
+                  ]
+                },
+                "to": {
+                  "model": "SpeciesReference",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "authors": {
+                  "column": "authors"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "refCode": {
+                  "column": "refCode"
+                },
+                "source": {
+                  "column": "source"
+                },
+                "title": {
+                  "column": "title"
+                },
+                "year": {
+                  "column": "year"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Reference"
+            }
+          },
           "Regency": {
             "fields": {
               "id": {
@@ -248,6 +347,62 @@
           },
           "Species": {
             "fields": {
+              "analSoftRays": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "analSpines": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "author": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "biologyText": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "bodyShape": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "citesStatus": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "climateZone": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "cmsStatus": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "commonName": {
                 "nullable": false,
                 "type": {
@@ -262,10 +417,101 @@
                   "kind": "scalar"
                 }
               },
+              "depthMaxMeters": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "depthMinMeters": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "distributionText": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "dorsalSoftRays": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "dorsalSpines": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "environment": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "etymology": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "family": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "fecundityText": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "fisheriesImportance": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "genus": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "id": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/int8@1",
+                  "kind": "scalar"
+                }
+              },
+              "isGamefish": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "iucnAssessedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
                   "kind": "scalar"
                 }
               },
@@ -276,8 +522,71 @@
                   "kind": "scalar"
                 }
               },
+              "lengthType": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "maxAgeYears": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/float8@1",
+                  "kind": "scalar"
+                }
+              },
+              "maxLengthCm": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/float8@1",
+                  "kind": "scalar"
+                }
+              },
+              "maxWeightKg": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/float8@1",
+                  "kind": "scalar"
+                }
+              },
+              "morphologyText": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "order": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "scientificName": {
                 "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "tempMaxC": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/float8@1",
+                  "kind": "scalar"
+                }
+              },
+              "tempMinC": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/float8@1",
+                  "kind": "scalar"
+                }
+              },
+              "threatToHumans": {
+                "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
@@ -338,6 +647,21 @@
                   "namespace": "public"
                 }
               },
+              "references": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "speciesId"
+                  ]
+                },
+                "to": {
+                  "model": "SpeciesReference",
+                  "namespace": "public"
+                }
+              },
               "regencies": {
                 "cardinality": "1:N",
                 "on": {
@@ -350,6 +674,21 @@
                 },
                 "to": {
                   "model": "SpeciesRegency",
+                  "namespace": "public"
+                }
+              },
+              "synonyms": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "speciesId"
+                  ]
+                },
+                "to": {
+                  "model": "Synonym",
                   "namespace": "public"
                 }
               },
@@ -371,20 +710,110 @@
             },
             "storage": {
               "fields": {
+                "analSoftRays": {
+                  "column": "analSoftRays"
+                },
+                "analSpines": {
+                  "column": "analSpines"
+                },
+                "author": {
+                  "column": "author"
+                },
+                "biologyText": {
+                  "column": "biologyText"
+                },
+                "bodyShape": {
+                  "column": "bodyShape"
+                },
+                "citesStatus": {
+                  "column": "citesStatus"
+                },
+                "climateZone": {
+                  "column": "climateZone"
+                },
+                "cmsStatus": {
+                  "column": "cmsStatus"
+                },
                 "commonName": {
                   "column": "commonName"
                 },
                 "createdAt": {
                   "column": "createdAt"
                 },
+                "depthMaxMeters": {
+                  "column": "depthMaxMeters"
+                },
+                "depthMinMeters": {
+                  "column": "depthMinMeters"
+                },
+                "distributionText": {
+                  "column": "distributionText"
+                },
+                "dorsalSoftRays": {
+                  "column": "dorsalSoftRays"
+                },
+                "dorsalSpines": {
+                  "column": "dorsalSpines"
+                },
+                "environment": {
+                  "column": "environment"
+                },
+                "etymology": {
+                  "column": "etymology"
+                },
+                "family": {
+                  "column": "family"
+                },
+                "fecundityText": {
+                  "column": "fecundityText"
+                },
+                "fisheriesImportance": {
+                  "column": "fisheriesImportance"
+                },
+                "genus": {
+                  "column": "genus"
+                },
                 "id": {
                   "column": "id"
+                },
+                "isGamefish": {
+                  "column": "isGamefish"
+                },
+                "iucnAssessedAt": {
+                  "column": "iucnAssessedAt"
                 },
                 "iucnStatusId": {
                   "column": "iucnStatusId"
                 },
+                "lengthType": {
+                  "column": "lengthType"
+                },
+                "maxAgeYears": {
+                  "column": "maxAgeYears"
+                },
+                "maxLengthCm": {
+                  "column": "maxLengthCm"
+                },
+                "maxWeightKg": {
+                  "column": "maxWeightKg"
+                },
+                "morphologyText": {
+                  "column": "morphologyText"
+                },
+                "order": {
+                  "column": "order"
+                },
                 "scientificName": {
                   "column": "scientificName"
+                },
+                "tempMaxC": {
+                  "column": "tempMaxC"
+                },
+                "tempMinC": {
+                  "column": "tempMinC"
+                },
+                "threatToHumans": {
+                  "column": "threatToHumans"
                 },
                 "updatedAt": {
                   "column": "updatedAt"
@@ -470,6 +899,80 @@
               },
               "namespaceId": "public",
               "table": "SpeciesPhoto"
+            }
+          },
+          "SpeciesReference": {
+            "fields": {
+              "isMainRef": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "referenceId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int8@1",
+                  "kind": "scalar"
+                }
+              },
+              "speciesId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int8@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "reference": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "referenceId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Reference",
+                  "namespace": "public"
+                }
+              },
+              "species": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "speciesId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Species",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "isMainRef": {
+                  "column": "isMainRef"
+                },
+                "referenceId": {
+                  "column": "referenceId"
+                },
+                "speciesId": {
+                  "column": "speciesId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "SpeciesReference"
             }
           },
           "SpeciesRegency": {
@@ -598,6 +1101,84 @@
               },
               "namespaceId": "public",
               "table": "SpeciesWppZone"
+            }
+          },
+          "Synonym": {
+            "fields": {
+              "author": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int8@1",
+                  "kind": "scalar"
+                }
+              },
+              "scientificName": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "speciesId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int8@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "species": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "speciesId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Species",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "author": {
+                  "column": "author"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "scientificName": {
+                  "column": "scientificName"
+                },
+                "speciesId": {
+                  "column": "speciesId"
+                },
+                "status": {
+                  "column": "status"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Synonym"
             }
           },
           "User": {
@@ -934,6 +1515,58 @@
               },
               "uniques": []
             },
+            "Reference": {
+              "columns": {
+                "authors": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/int8@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int8",
+                  "nullable": false
+                },
+                "refCode": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "source": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "title": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "year": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "refCode"
+                  ]
+                }
+              ]
+            },
             "Regency": {
               "columns": {
                 "id": {
@@ -967,6 +1600,46 @@
             },
             "Species": {
               "columns": {
+                "analSoftRays": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "analSpines": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "author": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "biologyText": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "bodyShape": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "citesStatus": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "climateZone": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "cmsStatus": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
                 "commonName": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
@@ -981,6 +1654,61 @@
                   "nativeType": "timestamptz",
                   "nullable": false
                 },
+                "depthMaxMeters": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "depthMinMeters": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "distributionText": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "dorsalSoftRays": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "dorsalSpines": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "environment": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "etymology": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "family": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "fecundityText": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "fisheriesImportance": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "genus": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
                 "id": {
                   "codecId": "pg/int8@1",
                   "default": {
@@ -990,15 +1718,74 @@
                   "nativeType": "int8",
                   "nullable": false
                 },
+                "isGamefish": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "iucnAssessedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
                 "iucnStatusId": {
                   "codecId": "pg/int4@1",
                   "nativeType": "int4",
+                  "nullable": true
+                },
+                "lengthType": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "maxAgeYears": {
+                  "codecId": "pg/float8@1",
+                  "nativeType": "float8",
+                  "nullable": true
+                },
+                "maxLengthCm": {
+                  "codecId": "pg/float8@1",
+                  "nativeType": "float8",
+                  "nullable": true
+                },
+                "maxWeightKg": {
+                  "codecId": "pg/float8@1",
+                  "nativeType": "float8",
+                  "nullable": true
+                },
+                "morphologyText": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "order": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
                   "nullable": true
                 },
                 "scientificName": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
                   "nullable": false
+                },
+                "tempMaxC": {
+                  "codecId": "pg/float8@1",
+                  "nativeType": "float8",
+                  "nullable": true
+                },
+                "tempMinC": {
+                  "codecId": "pg/float8@1",
+                  "nativeType": "float8",
+                  "nullable": true
+                },
+                "threatToHumans": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
                 },
                 "updatedAt": {
                   "codecId": "pg/timestamptz-temporal@1",
@@ -1115,6 +1902,90 @@
               "primaryKey": {
                 "columns": [
                   "id"
+                ]
+              },
+              "uniques": []
+            },
+            "SpeciesReference": {
+              "columns": {
+                "isMainRef": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "referenceId": {
+                  "codecId": "pg/int8@1",
+                  "nativeType": "int8",
+                  "nullable": false
+                },
+                "speciesId": {
+                  "codecId": "pg/int8@1",
+                  "nativeType": "int8",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "speciesId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "SpeciesReference"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Species"
+                  }
+                },
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "referenceId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "SpeciesReference"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Reference"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "referenceId"
+                  ],
+                  "name": "SpeciesReference_referenceId_idx_81b18e2c",
+                  "prefix": "SpeciesReference_referenceId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "speciesId"
+                  ],
+                  "name": "SpeciesReference_speciesId_idx_0eb671e7",
+                  "prefix": "SpeciesReference_speciesId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "speciesId",
+                  "referenceId"
                 ]
               },
               "uniques": []
@@ -1265,6 +2136,74 @@
                 "columns": [
                   "speciesId",
                   "wppZoneId"
+                ]
+              },
+              "uniques": []
+            },
+            "Synonym": {
+              "columns": {
+                "author": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/int8@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int8",
+                  "nullable": false
+                },
+                "scientificName": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "speciesId": {
+                  "codecId": "pg/int8@1",
+                  "nativeType": "int8",
+                  "nullable": false
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "speciesId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Synonym"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Species"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "speciesId"
+                  ],
+                  "name": "Synonym_speciesId_idx_0eb671e7",
+                  "prefix": "Synonym_speciesId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
                 ]
               },
               "uniques": []
@@ -1454,7 +2393,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "6c721381ab1e55dfe1c19d988a470df580fe11f0973892103659991273c6028a"
+    "storageHash": "9e5727d5d83f4bb912ab0b6144b0018ae5722f0201c2142c04402b5191dfc4db"
   },
   "execution": {
     "executionHash": "4a722e3d9562eecdf276bfb337d79c3bc426a2ea792fb8f0767017bd19149235",
