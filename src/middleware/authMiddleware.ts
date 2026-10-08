@@ -5,7 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret-key-anda';
 
 export interface AuthenticatedRequest extends Request {
   user?: {
-    userId: number;
+    userId: number | string;
     role: string;
   };
 }
@@ -24,7 +24,7 @@ export const authenticateToken = (
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: number; role: string };
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: number | string; role: string };
     req.user = decoded;
     next();
   } catch (error) {

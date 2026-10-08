@@ -1,12 +1,10 @@
 import multer from 'multer';
-import { mkdirSync } from 'node:fs';
 import path from 'path';
-
-mkdirSync(path.resolve('uploads'), { recursive: true });
+import fs from 'fs';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Pastikan folder 'uploads/' sudah dibuat di direktori root
+    fs.mkdir('uploads/', { recursive: true }, (error) => cb(error, 'uploads/'));
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);

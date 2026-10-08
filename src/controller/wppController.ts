@@ -40,12 +40,13 @@ export const editWpp = async (req: Request, res: Response): Promise<any> => {
             return res.status(400).json({ error: "ID wajib ada" })
         }
 
+        if(!code || !description) {
+            return res.status(400).json({ error: "Kode dan deskripsi wajib diisi" });
+        }
+
         const wpp = await db.orm.public.WppZone.where({
             id: Number(wppId)
-        }).update({
-            code,
-            description
-        });
+        }).update({ code, description });
 
         return res.status(200).json({
             message: "Data berhasil diperbarui",
