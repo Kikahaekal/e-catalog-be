@@ -1,13 +1,17 @@
 import express , { type Request, type Response } from "express";
+import dotenv from "dotenv";
 import fishRoutes from "./routes/fishRoutes.ts";
 import authRoutes from "./routes/authRoutes.ts";
 import iucnRoutes from "./routes/iucnRoutes.ts";
 import regencyRoutes from "./routes/regencyRoutes.ts";
 import wppRoutes from "./routes/wppRoutes.ts";
 import speciesRoutes from "./routes/speciesRoutes.ts";
+import referenceRoutes from "./routes/referenceRoutes.ts";
 import path from 'path';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +29,7 @@ app.use("/api/iucn", iucnRoutes);
 app.use("/api/regency", regencyRoutes);
 app.use("/api/wpp", wppRoutes);
 app.use("/api/species", speciesRoutes)
+app.use("/api/reference", referenceRoutes)
 
 
 app.listen(PORT, () => {

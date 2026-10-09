@@ -6,6 +6,7 @@ import {
     getAllReferences,
     getReference,
 } from "../controller/referenceController.ts";
+import { authenticateToken, requireRole } from "../middleware/authMiddleware.ts";
 
 const router = Router();
 
@@ -25,7 +26,7 @@ const router = Router();
  *       201:
  *         description: Data referensi berhasil dibuat
  */
-router.post("/", createReference);
+router.post("/", authenticateToken, requireRole(['ADMIN', 'SUPER_ADMIN']), createReference);
 
 /**
  * @openapi
@@ -49,7 +50,7 @@ router.post("/", createReference);
  *       200:
  *         description: Data referensi berhasil diperbarui
  */
-router.put("/:referenceId", editReference);
+router.put("/:referenceId", authenticateToken, requireRole(['ADMIN', 'SUPER_ADMIN']), editReference);
 
 /**
  * @openapi
@@ -67,7 +68,7 @@ router.put("/:referenceId", editReference);
  *       200:
  *         description: Data referensi berhasil dihapus
  */
-router.delete("/:referenceId", deleteReference);
+router.delete("/:referenceId", authenticateToken, requireRole(['ADMIN', 'SUPER_ADMIN']), deleteReference);
 
 /**
  * @openapi
