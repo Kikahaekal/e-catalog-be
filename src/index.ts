@@ -7,6 +7,8 @@ import regencyRoutes from "./routes/regencyRoutes.ts";
 import wppRoutes from "./routes/wppRoutes.ts";
 import speciesRoutes from "./routes/speciesRoutes.ts";
 import referenceRoutes from "./routes/referenceRoutes.ts";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec, swaggerUiOptions } from "./swagger.ts";
 import path from 'path';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
@@ -22,6 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
 
 app.use("/api/fish", fishRoutes);
 app.use("/api/auth", authRoutes);
