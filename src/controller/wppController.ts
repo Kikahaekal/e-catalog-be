@@ -105,13 +105,9 @@ export const getAllWpp = async (req: Request, res: Response): Promise<any> => {
     try {
         const wpps = await db.orm.public.WppZone.all();
 
-        if(!wpps || wpps.length === 0) {
-            return res.status(404).json({ error: "Data wpp tidak ditemukan" });
-        }
-
         return res.status(200).json({
             message: "Data berhasil diambil",
-            data: wpps,
+            data: wpps || [],
         });
     } catch (error) {
         console.error("Error saat mengambil data:", error);

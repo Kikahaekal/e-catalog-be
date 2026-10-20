@@ -13,7 +13,12 @@ export default defineConfig({
   },
   deps: {
     onlyBundle: false,
-    alwaysBundle: (id) =>
-      !isBuiltin(id),
+    alwaysBundle: (id) => {
+      // Don't bundle swagger-ui-express - it needs to access its own static files
+      if (id.includes('swagger-ui-express') || id.includes('swagger-jsdoc')) {
+        return false;
+      }
+      return !isBuiltin(id);
+    },
   },
 });

@@ -1,11 +1,14 @@
 import { connectDatabase, db } from "./db.ts";
+import bcrypt from "bcryptjs";
+
+const SALT_ROUNDS = 10;
 
 const users = [
   {
-    email: "superadmin@example.com",
+    email: "admin@example.com",
     name: "Super Admin",
     // Hash password dummy (contoh: "password123")
-    password: "$2b$10$eImiTXuWVxfM37uY4JANjOL.88448rG8LhE/2S5kP/w6QzG/Z4m/2",
+    password: bcrypt.hashSync("admin123", SALT_ROUNDS),
     role: "ADMIN" as const,
   }
 ];

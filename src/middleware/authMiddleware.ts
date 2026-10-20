@@ -1,7 +1,7 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret-key-anda';
+const JWT_SECRET = process.env.JWT_SECRET || 'secret-key';
 
 export interface AuthenticatedRequest extends Request {
   user?: {
@@ -35,7 +35,10 @@ export const authenticateToken = (
 // Middleware opsional untuk membatasi role tertentu
 export const requireRole = (roles: string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    const userRole = req.user?.role ? req.user.role.toUpperCase() : '';
+    const normalizedRoles = roles.map(r => r.toUpperCase());
+
+    if (!req.user || !normalizedRoles.includes(userRole)) {
       res.status(403).json({ message: 'Anda tidak memiliki hak akses untuk tindakan ini.' });
       return;
     }

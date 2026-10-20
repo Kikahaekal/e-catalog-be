@@ -119,13 +119,9 @@ export const getAllIucn = async (req: Request, res: Response): Promise<any> => {
     try{
         const iucnList = await db.orm.public.IucnStatus.all();
 
-        if(!iucnList || iucnList.length === 0) {
-            return res.status(404).json({ error: "Data IUCN tidak ditemukan" });
-        }
-
         return res.status(200).json({
             message: "Data IUCN berhasil diambil",
-            data: iucnList,
+            data: iucnList || [],
         });
     } catch (error) {
         console.error("Error saat mengambil data IUCN:", error);

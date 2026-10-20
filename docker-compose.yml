@@ -1,0 +1,151 @@
+# ============================================
+# E-Catalog — Docker Compose
+# ============================================
+#
+# Services:
+#   db       → PostgreSQL 15 (persistent volume)
+#   backend  → Express 5 + Prisma 8 API
+#   frontend → Nginx (static SPA)
+# 
+# Port Access:
+#   db        -> 127.0.0.1:5435
+#   backend   -> 127.0.0.1:3002
+#   frontend  -> 127.0.0.1:8080
+# 
+# ============================================
+#
+# Quick Start:
+#   cp .env.example .env
+#   nano .env  # Edit production values
+#   docker compose build --no-cache
+#   docker compose up -d
+#
+# Run migrations:
+#   docker compose exec backend npx prisma db init
+#
+# Or start with auto-migrations:
+#   RUN_MIGRATIONS=true docker compose up -d --build
+#
+# Check logs:
+#   docker compose logs -f
+#
+# ============================================
+
+services:
+  # ── PostgreSQL Database ─────────────────────
+  db:
+    image: postgres:15-alpine
+    container_name: ecatalog-db
+    restart: unless-stopped
+    
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-12345678}
+      POSTGRES_DB: ${POSTGRES_DB:-ecatalog}
+      
+    # Akses database postgreSQL bisa melalui ip 127.0.0.1:5435
+    ports:
+      - "127.0.0.1:5435:5432"
+    
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-ecatalog}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    
+    networks:
+      - ecatalog-network
+
+  # ── Backend API ─────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    container_name: ecatalog-backend
+    restart: unless-stopped
+    
+    depends_on:
+      db:
+        condition: service_healthy
+    
+    environment:
+      # Database connection
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-12345678}@db:5432/${POSTGRES_DB:-ecatalog}
+      DB_HOST: db
+      DB_PORT: 5432
+      
+      # Server configuration
+      PORT: 3000
+      NODE_ENV: production
+      
+      # Security
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-please}
+      
+      # Migrations
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-false}
+    
+    # Akses BE dengan IP 127.0.0.1:3002
+    ports:
+      - "127.0.0.1:3002:3000"
+    
+    volumes:
+      - ./uploads:/app/uploads
+    
+    networks:
+      - ecatalog-network
+    
+    # Health check for orchestration
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ── Frontend SPA ────────────────────────────
+  frontend:
+    build:
+      context: ../E-Catalog
+      dockerfile: Dockerfile
+      args:
+        # ✅ Use relative URL (aPanel Nginx will proxy /api/ to backend)
+        VITE_API_URL: "/api"
+    
+    container_name: ecatalog-frontend
+    restart: unless-stopped
+    
+    depends_on:
+      - backend
+    
+    # ✅ Bind to localhost:8080 (aPanel Nginx will proxy / to this)
+    ports:
+      - "127.0.0.1:8080:80"
+    
+    networks:
+      - ecatalog-network
+
+# ── Volumes ────────────────────────────────────
+volumes:
+  pgdata:
+    driver: local
+    # Optional: specify path for easier backups
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /path/to/pgdata
+  
+    # Optional: specify path for easier backups
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /path/to/uploads
+
+# ── Networks ───────────────────────────────────
+networks:
+  ecatalog-network:
+    driver: bridge
