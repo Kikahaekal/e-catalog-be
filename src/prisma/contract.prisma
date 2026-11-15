@@ -1,3 +1,4 @@
+// use prisma-8
 enum Role {
   ADMIN
   SUPER_ADMIN
@@ -157,6 +158,8 @@ model UserSubmission {
   submittedName String
   photoFilePath String
   locationNote  String?
+  latitude      Float?
+  longitude     Float?
   submitterName String?
   createdAt     DateTime @default(now())
   updatedAt     temporal.updatedAt()

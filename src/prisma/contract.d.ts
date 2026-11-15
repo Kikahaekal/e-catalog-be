@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'9e5727d5d83f4bb912ab0b6144b0018ae5722f0201c2142c04402b5191dfc4db'>;
+  StorageHashBase<'db20e4fede132bb4197fefd59e58af53c47ffa8eafcd8efb0a8141ec59cb7602'>;
 export type ExecutionHash =
   ExecutionHashBase<'4a722e3d9562eecdf276bfb337d79c3bc426a2ea792fb8f0767017bd19149235'>;
 export type ProfileHash =
@@ -351,7 +351,9 @@ export type FieldOutputTypes = {
     readonly UserSubmission: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/int8@1']['output'];
+      readonly latitude: CodecTypes['pg/float8@1']['output'] | null;
       readonly locationNote: CodecTypes['pg/text@1']['output'] | null;
+      readonly longitude: CodecTypes['pg/float8@1']['output'] | null;
       readonly photoFilePath: CodecTypes['pg/text@1']['output'];
       readonly submittedName: CodecTypes['pg/text@1']['output'];
       readonly submitterName: CodecTypes['pg/text@1']['output'] | null;
@@ -467,7 +469,9 @@ export type FieldInputTypes = {
     readonly UserSubmission: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/int8@1']['input'];
+      readonly latitude: CodecTypes['pg/float8@1']['input'] | null;
       readonly locationNote: CodecTypes['pg/text@1']['input'] | null;
+      readonly longitude: CodecTypes['pg/float8@1']['input'] | null;
       readonly photoFilePath: CodecTypes['pg/text@1']['input'];
       readonly submittedName: CodecTypes['pg/text@1']['input'];
       readonly submitterName: CodecTypes['pg/text@1']['input'] | null;
@@ -583,7 +587,9 @@ export type StorageColumnTypes = {
     readonly UserSubmission: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly id: CodecTypes['pg/int8@1']['output'];
+      readonly latitude: CodecTypes['pg/float8@1']['output'] | null;
       readonly locationNote: CodecTypes['pg/text@1']['output'] | null;
+      readonly longitude: CodecTypes['pg/float8@1']['output'] | null;
       readonly photoFilePath: CodecTypes['pg/text@1']['output'];
       readonly submittedName: CodecTypes['pg/text@1']['output'];
       readonly submitterName: CodecTypes['pg/text@1']['output'] | null;
@@ -699,7 +705,9 @@ export type StorageColumnInputTypes = {
     readonly UserSubmission: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly id: CodecTypes['pg/int8@1']['input'];
+      readonly latitude: CodecTypes['pg/float8@1']['input'] | null;
       readonly locationNote: CodecTypes['pg/text@1']['input'] | null;
+      readonly longitude: CodecTypes['pg/float8@1']['input'] | null;
       readonly photoFilePath: CodecTypes['pg/text@1']['input'];
       readonly submittedName: CodecTypes['pg/text@1']['input'];
       readonly submitterName: CodecTypes['pg/text@1']['input'] | null;
@@ -846,7 +854,9 @@ export namespace Models {
   export type public_UserSubmission = {
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     id: CodecTypes['pg/int8@1']['output'];
+    latitude: CodecTypes['pg/float8@1']['output'] | null;
     locationNote: CodecTypes['pg/text@1']['output'] | null;
+    longitude: CodecTypes['pg/float8@1']['output'] | null;
     photoFilePath: CodecTypes['pg/text@1']['output'];
     submittedName: CodecTypes['pg/text@1']['output'];
     submitterName: CodecTypes['pg/text@1']['output'] | null;
@@ -1627,9 +1637,19 @@ type ContractBase = Omit<
                     readonly expression: 'autoincrement()';
                   };
                 };
+                readonly latitude: {
+                  readonly nativeType: 'float8';
+                  readonly codecId: 'pg/float8@1';
+                  readonly nullable: true;
+                };
                 readonly locationNote: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly longitude: {
+                  readonly nativeType: 'float8';
+                  readonly codecId: 'pg/float8@1';
                   readonly nullable: true;
                 };
                 readonly photoFilePath: {
@@ -2496,9 +2516,17 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int8@1' };
               };
+              readonly latitude: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/float8@1' };
+              };
               readonly locationNote: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly longitude: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/float8@1' };
               };
               readonly photoFilePath: {
                 readonly nullable: false;
@@ -2527,7 +2555,9 @@ type ContractBase = Omit<
               readonly fields: {
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly id: { readonly column: 'id' };
+                readonly latitude: { readonly column: 'latitude' };
                 readonly locationNote: { readonly column: 'locationNote' };
+                readonly longitude: { readonly column: 'longitude' };
                 readonly photoFilePath: { readonly column: 'photoFilePath' };
                 readonly submittedName: { readonly column: 'submittedName' };
                 readonly submitterName: { readonly column: 'submitterName' };

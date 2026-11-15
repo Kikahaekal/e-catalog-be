@@ -5,10 +5,32 @@ import fs from "fs";
 // fungsi buat input ikan dari user
 export const submitFishName = async (req: Request, res: Response): Promise<any> => {
     try{
-        const { submittedName, locationNote, submitterName, photoFilePath: bodyPhotoPath} = req.body;
+        const { submittedName, locationNote, submitterName, photoFilePath: bodyPhotoPath, latitude: rawLatitude, longitude: rawLongitude} = req.body;
 
         if (!submittedName) {
             return res.status(400).json({ error: "Nama ikan wajib diisi" });
+        }
+
+        const parseCoordinate = (value: unknown): number | null => {
+            if (value === undefined || value === null || value === "") return null;
+            if (typeof value !== "string" && typeof value !== "number") return Number.NaN;
+            const coordinate = Number(value);
+            return Number.isFinite(coordinate) ? coordinate : Number.NaN;
+        };
+        const latitude = parseCoordinate(rawLatitude);
+        const longitude = parseCoordinate(rawLongitude);
+
+        if ((latitude === null) !== (longitude === null)) {
+            return res.status(400).json({ error: "Latitude dan longitude harus diisi bersama" });
+        }
+        if (latitude !== null && (latitude < -90 || latitude > 90)) {
+            return res.status(400).json({ error: "Latitude harus berada di antara -90 dan 90" });
+        }
+        if (longitude !== null && (longitude < -180 || longitude > 180)) {
+            return res.status(400).json({ error: "Longitude harus berada di antara -180 dan 180" });
+        }
+        if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+            return res.status(400).json({ error: "Latitude dan longitude harus berupa angka yang valid" });
         }
 
         const photoFilePath = req.file ? req.file.path.replace(/\\/g, "/") : bodyPhotoPath;
@@ -22,6 +44,8 @@ export const submitFishName = async (req: Request, res: Response): Promise<any> 
             photoFilePath,
             locationNote: locationNote || null,
             submitterName: submitterName || null,
+            latitude,
+            longitude,
         })
 
         const responseData = {

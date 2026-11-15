@@ -63,6 +63,8 @@ const swaggerOptions = {
           properties: {
             submittedName: { type: 'string' },
             locationNote: { type: 'string', nullable: true },
+            latitude: { type: 'number', format: 'double', nullable: true },
+            longitude: { type: 'number', format: 'double', nullable: true },
             submitterName: { type: 'string', nullable: true },
             photoFilePath: { type: 'string', description: 'URL foto yang diberikan sebagai alternative data file. Gunakan form-data multipart saat mengunggah foto.' },
           },
@@ -75,6 +77,8 @@ const swaggerOptions = {
             submittedName: { type: 'string' },
             photoFilePath: { type: 'string' },
             locationNote: { type: 'string', nullable: true },
+            latitude: { type: 'number', format: 'double', nullable: true },
+            longitude: { type: 'number', format: 'double', nullable: true },
             submitterName: { type: 'string', nullable: true },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' },

@@ -1284,10 +1284,24 @@
                   "kind": "scalar"
                 }
               },
+              "latitude": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/float8@1",
+                  "kind": "scalar"
+                }
+              },
               "locationNote": {
                 "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "longitude": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/float8@1",
                   "kind": "scalar"
                 }
               },
@@ -1329,8 +1343,14 @@
                 "id": {
                   "column": "id"
                 },
+                "latitude": {
+                  "column": "latitude"
+                },
                 "locationNote": {
                   "column": "locationNote"
+                },
+                "longitude": {
+                  "column": "longitude"
                 },
                 "photoFilePath": {
                   "column": "photoFilePath"
@@ -2306,9 +2326,19 @@
                   "nativeType": "int8",
                   "nullable": false
                 },
+                "latitude": {
+                  "codecId": "pg/float8@1",
+                  "nativeType": "float8",
+                  "nullable": true
+                },
                 "locationNote": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
+                  "nullable": true
+                },
+                "longitude": {
+                  "codecId": "pg/float8@1",
+                  "nativeType": "float8",
                   "nullable": true
                 },
                 "photoFilePath": {
@@ -2393,7 +2423,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "9e5727d5d83f4bb912ab0b6144b0018ae5722f0201c2142c04402b5191dfc4db"
+    "storageHash": "db20e4fede132bb4197fefd59e58af53c47ffa8eafcd8efb0a8141ec59cb7602"
   },
   "execution": {
     "executionHash": "4a722e3d9562eecdf276bfb337d79c3bc426a2ea792fb8f0767017bd19149235",
